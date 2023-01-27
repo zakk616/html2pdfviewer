@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<link href="style.css" rel="stylesheet">
+	<script src="index.js"></script>
+	<script>
+		try {
+			pdf2htmlEX.defaultViewer = new pdf2htmlEX.Viewer({});
+		} catch (e) { }
+	</script>
+	<title>Report Viewer</title>
+</head>
+
+<body>
+	
+	<div id="sidebar">
+		<div id="outline">
+			<a href="javascript:void(0)" class="btn btn-lg btn-secondary btn-download">
+				<span class="material-symbols-outlined">print</span>
+				<span style="padding-left: 10px;">Print</span>
+			</a>
+		</div>
+	</div>
+	
+	<div id="page-container">
+		
+		<div id="pf1" class="pf w0 h0" data-page-no="1">
+
+		</div>
+	</div>
+</body>
+</html>
