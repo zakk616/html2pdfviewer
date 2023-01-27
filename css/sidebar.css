@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
+
+* {
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.TopBox {
+    /* width: 71px; */
+    height: 5px;
+    margin: 0 auto;
+    background: #303840;
+    border-radius: 0 0 12px 12px;
+}
+
+.HoverBox {
+    width: 45px;
+    height: 60px;
+    margin: 0 auto;
+    background: #303840;
+    border-radius: 10px;
+    position: absolute;
+    z-index: 0;
+    left: 5px;
+    top: 20px;
+    transition: 250ms;
+}
+
+.MenuBox>ul>li>span {
+    position: absolute;
+    left: 80%;
+    opacity: 0;
+    top: 12px;
+    margin-left: 2rem;
+    color: #303840;
+    background: #fff;
+    transition: 250ms ease all;
+    border-radius: 17.5px;
+    line-height: 0;
+    padding: 16px 15px;
+    z-index: -1;
+}
+
+.MenuBox>ul>li {
+    display: block;
+    width: 55px;
+    height: 55px;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 12px;
+    line-height: 68px;
+}
+
+.MenuBox:not(:hover),
+.MenuBox>ul>li:hover svg {
+    color: white;
+}
+
+.MenuBox>ul>li:hover span {
+    width: max-content;
+    display: block;
+    left: 100%;
+    opacity: 1;
+}
+
+.Active>svg {
+    color: white;
+}
+
+.feather {
+    color: #6e6c6c;
+    width: 25px;
+    transition: 1s;
+}
+
+.material {
+    color: #6e6c6c;
+    width: 25px;
+    transition: 1s;
+}
+
+.MenuBox {
+    background: white;
+    position: absolute;
+    margin: 34px 12px;
+    /* height: 90%; */
+    border-radius: 9px;
+    /* box-shadow: 0 0 40px 0 rgb(94 92 154 / 6%); */
+    box-shadow: 1px 1px 3px 1px #333;
+}
+
+.Contact {
+    display: flex;
+}
+
+.MenuBox>ul {
+    padding: 0 15px;
+    margin-top: 15px;
+}
+
+.PageContact>div {
+    transition: .5s;
+}
+
+@keyframes Effect_0 {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(0.5, 1.5);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes Effect_1 {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(0.5, 1.5);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes Effect_2 {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(0.5, 1.5);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes Effect_3 {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(0.5, 1.5);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes Effect_4 {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(0.5, 1.5);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes Effect_5 {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(0.5, 1.5);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+
