@@ -4,7 +4,11 @@
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<link rel="stylesheet" href="css/style.css" >
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="style1.css">
+	<link rel="stylesheet" href="css/fonts.css">
 	<link rel="stylesheet" href="css/sidebar.css">
 	<script src="js/index.js"></script>
 	<script>
@@ -13,6 +17,27 @@
 		} catch (e) { }
 	</script>
 	<title>Report Viewer</title>
+
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&display=swap');
+
+		.signature {
+			margin-top: 40px;
+			/* font-family: Brush Script MT, Brush Script Std, cursive; */
+			font-family: 'Mrs Saint Delafield', cursive;
+			font-weight: bold;
+		}
+
+		tbody,
+		td,
+		tfoot,
+		th,
+		thead,
+		tr {
+			border-bottom: 2px solid red !important;
+			border-style: double;
+		}
+	</style>
 </head>
 
 <body>
@@ -91,27 +116,82 @@
 				</div>
 			</div>
 		</div>
-		<div id="pf1" class="pf w0 h0" data-page-no="1" style={{ fontSize: width / 12 }}>
-			<div>
-				<!-- click on the any of the paragraph
-				and see the change -->
-				<p style="font-size:1.9vw;;
-					font-weight:bold; 
-					color:green;">Welcome to</p>
-				<p style="font-size:35px;
-					font-weight:bold; 
-					color:green;">GeeksforGeeks!.</p>
-				<button>Click Here!</button>
+		<div id="pf1" class="pf w0 h0" data-page-no="1" style="font-size: 99%;">
+			<div backtop="7mm" backbottom="7mm" backleft="10mm" backright="10mm">
+				<div class="row" style="border-top: 20px solid red;">
+				</div>
+				<div class="backimg">
+					<div class="row datesection mt-2 mb-0 p-0">
+						<div class="col-8"></div>
+						<div class="col-4">
+							<div>Created Date : <span id="createDate"></span> 01/09/2023 12:34 pm</div>
+							<div>Doc ID : <span id="docNo"></span> 14139</div>
+						</div>
+					</div>
+					<div class="row imagsection m-0 p-0">
+						<div class="col-6 text-center">
+							<img class="img-fluid" src="./images/ccl-logo.png">
+						</div>
+						<div class="col-6"></div>
+					</div>
+					<div class="row headersection">
+						<div class="col-12 text-center ">
+							<div class="h2">Signature Certificate</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-11 col-12 mx-auto">
+							<div class="table-responsive">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>SIGNER</th>
+											<th>TIMESTAMP</th>
+											<th>SIGNATURE</th>
+										</tr>
+									</thead>
+									<tbody class="textsection-01 dataRow">
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</div>
 
 	<script src="js/sidebar.js"></script>
 	<script src="js/jquery.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 	<script src="js/html2pdf.js"></script>
 	<script>
+
+		var keys = 'http://localhost:19518/api/';
+		var instanceID = 20268;
+
+		$(document).ready(function () {
+			getParticipants();
+		});
+
 		$('#btnprint').on('click', function () {
-			$("#pf1").removeAttr("style");
+			var css = '@page { size: portrait; }',
+				head = document.head || document.getElementsByTagName('head')[0],
+				style = document.createElement('style');
+
+			style.type = 'text/css';
+			style.media = 'print';
+
+			if (style.styleSheet) {
+				style.styleSheet.cssText = css;
+			} else {
+				style.appendChild(document.createTextNode(css));
+			}
+
+			head.appendChild(style);
+
+
 			window.print();
 		});
 
@@ -129,34 +209,104 @@
 
 		});
 
-
-		const options = {
-			margin: 0,
-			filename: 'filename.pdf',
-			image: {
-				type: 'jpeg',
-				quality: 0.98
-			},
-			html2canvas: {
-				scale: 2
-			},
-			jsPDF: {
-				unit: 'in',
-				format: 'a4',
-				orientation: 'portrait'
-			}
-		}
-
-
 		$('#btnDownload').click(function (e) {
+			const options = {
+				margin: 0,
+				filename: 'filename.pdf',
+				image: {
+					type: 'jpeg',
+					quality: 0.98
+				},
+				html2canvas: {
+					scale: 2
+				},
+				pagebreak: { avoid: '#row' },
+				jsPDF: {
+					unit: 'in',
+					format: 'a4',
+					orientation: 'p'
+				}
+			}
 			e.preventDefault();
 			var element = document.getElementById('pf1').innerHTML;
 			//html2pdf(element);
 
 
-			html2pdf().from(element).set(options).save();
+			html2pdf().from(element).set(options).toPdf().get('pdf').then((pdf) => {
+				var totalPages = pdf.internal.getNumberOfPages();
+
+				for (let i = 1; i <= totalPages; i++) {
+					// set footer to every page
+					pdf.setPage(i);
+					// set footer font
+					pdf.setFontSize(10);
+					pdf.setTextColor(150);
+					// this example gets internal pageSize just as an example to locate your text near the borders in case you want to do something like "Page 3 out of 4"
+					pdf.text(pdf.internal.pageSize.getWidth() - pdf.internal.pageSize.getWidth() + 0.3,
+						pdf.internal.pageSize.getHeight() - 0.3, 'YOUR TEXT GOES HERE!');
+
+					// you can add the line separator as an image, consult the docs below to properly set the place of the image
+					//pdf.addImage(img, 'png', 0, 0, 52, 23)
+				}
+
+			}).save();
 			//window.print();
 		});
+
+		function getParticipants() {
+			$.ajax({
+				type: "POST",
+				contentType: "application/json;charset=utf-8",
+				url: keys + 'BudgetApproval/GetBAParticipateLog/' + instanceID,
+				success: function (data) {
+					for (let i = 1; i < data.data.getrLogs.length; i++) {
+						let row = data.data.getrLogs[i];
+						$(".dataRow").append(bindRow(row.userName, row.employeeID, row.userSign, row.createdOn, row.systemIPAddress, row.email))
+					}
+				},
+			});
+		}
+
+		function bindRow(userName, employeeID, userSign, createdOn, systemIPAddress, email) {
+			var sign = userSign ? `<img class="img-fluid" src="` + userSign + `">` : `<h2 class="signature">` + userName + `</h2>`;
+			email = email != null ? email : '-';
+			let row = `
+						<tr id="row">
+							<td class="stage01">
+								<div class="h6">INITIATED BY:</div>
+								<div class="h6">`+ userName + `</div>
+								<div class="h6">
+									<span>EMPLOYEE ID: </span> 
+									<span class="nbr">`+ employeeID + `</span>
+								</div>
+								<div class="h6">
+									<span>IP ADDRESS: </span> 
+									<span class="nbr">`+ systemIPAddress + `</span>
+								</div>
+								<div class="h6">
+									<span>Email: </span> 
+									<span class="nbr">`+ email + `</span>
+								</div>
+							</td>
+							<td class="stage02">
+								<div class="h6">
+									<span>SENT:</span> 
+									<span class="nbr">`+ moment(createdOn).format('MM/DD/YYYY hh:mm A') + `</span>
+								</div>
+								<div class="h6">
+									<span>SIGNED:</span> 
+									<span class="nbr">`+ moment(createdOn).format('MM/DD/YYYY hh:mm A') + `</span></div>
+							</td>
+							<td class="stage03">
+								<div class="text-center">
+									`+ sign + `
+								</div>
+							</td>
+						</tr>
+						`
+			return row;
+		}
+
 	</script>
 </body>
 

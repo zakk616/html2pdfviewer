@@ -1,6 +1,6 @@
-body {
+/* body {
   font-family: Exo\2, Helvetica Neue, Arial, sans-serif;
-}
+} */
 
 #sidebar {
   position: absolute;
@@ -575,20 +575,21 @@ body {
   height: 49.898438px;
 }
 
-.h6 {
+/* .h6 {
   height: 58.214844px;
-}
+} */
 
 .h8 {
   height: 62.373047px;
 }
 
-.h5 {
+/* .h5 {
   height: 124.746094px;
-}
+} */
 
 .h0 {
-  height: 841.89px;
+  /* height: 841.89px; */
+  min-height: 841.89px;
 }
 
 .h1 {
@@ -596,7 +597,8 @@ body {
 }
 
 .w0 {
-  width: 595.28px;
+  /* width: 595.28px; */
+  width: 794px;
 }
 
 .w1 {

@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
 
-* {
+/* * {
     text-align: center;
     font-family: 'Open Sans', sans-serif;
-}
+} */
 
 .TopBox {
     /* width: 71px; */
@@ -89,6 +89,7 @@
     border-radius: 9px;
     /* box-shadow: 0 0 40px 0 rgb(94 92 154 / 6%); */
     box-shadow: 1px 1px 3px 1px #333;
+    text-align: center;
 }
 
 .Contact {
