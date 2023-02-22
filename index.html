@@ -118,8 +118,8 @@
 		</div>
 		<div id="pf1" class="pf w0 h0" data-page-no="1" style="font-size: 99%;">
 			<div backtop="7mm" backbottom="7mm" backleft="10mm" backright="10mm">
-				<div class="row" style="border-top: 20px solid red;">
-				</div>
+				<!-- <div class="row" style="border-top: 20px solid red;">
+				</div> -->
 				<div class="backimg">
 					<div class="row datesection mt-2 mb-0 p-0">
 						<div class="col-8"></div>
@@ -166,6 +166,7 @@
 	<script src="js/jquery.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 	<script src="js/html2pdf.js"></script>
+	<script src="images/images.js"></script>
 	<script>
 
 		var keys = 'http://localhost:19518/api/';
@@ -211,7 +212,7 @@
 
 		$('#btnDownload').click(function (e) {
 			const options = {
-				margin: 0,
+				margin: [0.5, 0, 0, 0],
 				filename: 'filename.pdf',
 				image: {
 					type: 'jpeg',
@@ -231,7 +232,6 @@
 			var element = document.getElementById('pf1').innerHTML;
 			//html2pdf(element);
 
-
 			html2pdf().from(element).set(options).toPdf().get('pdf').then((pdf) => {
 				var totalPages = pdf.internal.getNumberOfPages();
 
@@ -243,14 +243,17 @@
 					pdf.setTextColor(150);
 					// this example gets internal pageSize just as an example to locate your text near the borders in case you want to do something like "Page 3 out of 4"
 					pdf.text(pdf.internal.pageSize.getWidth() - pdf.internal.pageSize.getWidth() + 0.3,
-						pdf.internal.pageSize.getHeight() - 0.3, 'YOUR TEXT GOES HERE!');
+						pdf.internal.pageSize.getHeight() - 0.3, 'Page ' + i + ' of ' + totalPages);
 
 					// you can add the line separator as an image, consult the docs below to properly set the place of the image
-					//pdf.addImage(img, 'png', 0, 0, 52, 23)
+					pdf.addImage(backgroundImg, 'png', 1.5, 3.5, pdf.internal.pageSize.getWidth() - 3, pdf.internal.pageSize.getWidth() - 3)
+					pdf.addImage(footerLogo, 'png', 0, 0, pdf.internal.pageSize.getWidth(), 0.3)
 				}
 
-			}).save();
-			//window.print();
+				window.open(pdf.output('bloburl'), '_blank');
+
+			});
+			//window.print(html2pdf().from(element).set(options).toPdf().get('pdf'));
 		});
 
 		function getParticipants() {
