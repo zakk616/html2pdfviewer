@@ -14,15 +14,14 @@
 	<script>
 		try {
 			pdf2htmlEX.defaultViewer = new pdf2htmlEX.Viewer({});
-		} catch (e) { }
+		} 
+		catch (e) { }
 	</script>
 	<title>Report Viewer</title>
 
 	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&display=swap');
-
 		.signature {
-			margin-top: 40px;
+			margin-top: 20px;
 			/* font-family: Brush Script MT, Brush Script Std, cursive; */
 			font-family: 'Mrs Saint Delafield', cursive;
 			font-weight: bold;
@@ -41,9 +40,7 @@
 </head>
 
 <body>
-
 	<div id="page-container">
-
 		<div id="sidebar">
 			<div id="outline">
 				<div class="MenuBox">
@@ -59,7 +56,7 @@
 							</svg>
 							<span>Home</span>
 						</li>
-						<li id="btnprint">
+						<!-- <li id="btnprint">
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
 								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
 								stroke-linejoin="round" class="feather feather-printer">
@@ -69,7 +66,7 @@
 								<rect x="6" y="14" width="12" height="8"></rect>
 							</svg>
 							<span>Print</span>
-						</li>
+						</li> -->
 						<li id="btnDownload">
 
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -124,8 +121,8 @@
 					<div class="row datesection mt-2 mb-0 p-0">
 						<div class="col-8"></div>
 						<div class="col-4">
-							<div>Created Date : <span id="createDate"></span> 01/09/2023 12:34 pm</div>
-							<div>Doc ID : <span id="docNo"></span> 14139</div>
+							<div>Print Date : <span id="createDate"></span></div>
+							<div>Doc ID : <span id="docNo"></span></div>
 						</div>
 					</div>
 					<div class="row imagsection m-0 p-0">
@@ -170,44 +167,39 @@
 	<script>
 
 		var keys = 'http://localhost:19518/api/';
-		var instanceID = 20268;
+		var instanceID = 14452;
 
 		$(document).ready(function () {
 			getParticipants();
+			$('#docNo').html(instanceID);
+			$('#createDate').html(moment(new Date()).format('DD-MM-YYYY hh:mm A'));
 		});
 
-		$('#btnprint').on('click', function () {
-			var css = '@page { size: portrait; }',
-				head = document.head || document.getElementsByTagName('head')[0],
-				style = document.createElement('style');
-
-			style.type = 'text/css';
-			style.media = 'print';
-
-			if (style.styleSheet) {
-				style.styleSheet.cssText = css;
-			} else {
-				style.appendChild(document.createTextNode(css));
-			}
-
-			head.appendChild(style);
-
-
-			window.print();
-		});
+		// $('#btnprint').on('click', function () {
+		// 	var css = '@page { size: portrait; }',
+		// 		head = document.head || document.getElementsByTagName('head')[0],
+		// 		style = document.createElement('style');
+		// 	style.type = 'text/css';
+		// 	style.media = 'print';
+		// 	if (style.styleSheet) {
+		// 		style.styleSheet.cssText = css;
+		// 	} else {
+		// 		style.appendChild(document.createTextNode(css));
+		// 	}
+		// 	head.appendChild(style);
+		// 	window.print();
+		// });
 
 		$('#zoomin').on('click', function () {
 			var currentWidth = $('#pf1').width();
 			$("#pf1").css("width", currentWidth + 100 + "px");
 			$("#pf1").css("height", ((currentWidth + 100) * 1.414) + "px");
-
 		});
 
 		$('#zoomout').on('click', function () {
 			var currentWidth = $('#pf1').width();
 			$("#pf1").css("width", currentWidth - 100 + "px");
 			$("#pf1").css("height", ((currentWidth - 100) * 1.414) + "px");
-
 		});
 
 		$('#btnDownload').click(function (e) {
@@ -246,7 +238,7 @@
 						pdf.internal.pageSize.getHeight() - 0.3, 'Page ' + i + ' of ' + totalPages);
 
 					// you can add the line separator as an image, consult the docs below to properly set the place of the image
-					pdf.addImage(backgroundImg, 'png', 1.5, 3.5, pdf.internal.pageSize.getWidth() - 3, pdf.internal.pageSize.getWidth() - 3)
+					//pdf.addImage(backgroundImg, 'png', 1.5, 3.5, pdf.internal.pageSize.getWidth() - 3, pdf.internal.pageSize.getWidth() - 3)
 					pdf.addImage(footerLogo, 'png', 0, 0, pdf.internal.pageSize.getWidth(), 0.3)
 				}
 
@@ -258,52 +250,61 @@
 
 		function getParticipants() {
 			$.ajax({
-				type: "POST",
+				type: "GET",
 				contentType: "application/json;charset=utf-8",
-				url: keys + 'BudgetApproval/GetBAParticipateLog/' + instanceID,
+				url: keys + 'PDFReports/GetDegitalSignatures?instanceId=' + instanceID,
 				success: function (data) {
-					for (let i = 1; i < data.data.getrLogs.length; i++) {
-						let row = data.data.getrLogs[i];
-						$(".dataRow").append(bindRow(row.userName, row.employeeID, row.userSign, row.createdOn, row.systemIPAddress, row.email))
+					for (let i = 0; i < data.data.length; i++) {
+						let row = data.data[i];
+						$(".dataRow").append(bindRow(row.username, row.employeeId, row.userSign,row.status, row.assignedOn, row.performedOn, row.ipAddress, row.email, row.comment))
 					}
 				},
 			});
 		}
 
-		function bindRow(userName, employeeID, userSign, createdOn, systemIPAddress, email) {
+		function bindRow(userName, employeeID, userSign, status, assignedOn, performedOn, systemIPAddress, email, comment) {
 			var sign = userSign ? `<img class="img-fluid" src="` + userSign + `">` : `<h2 class="signature">` + userName + `</h2>`;
 			email = email != null ? email : '-';
+			comment = comment != null ? comment : '-';
+			systemIPAddress = systemIPAddress != null ? systemIPAddress : '-';
+			assignedOn = assignedOn != null ? moment(assignedOn).format('DD-MM-YYYY hh:mm A') : '-';
+			performedOn = performedOn != null ? moment(performedOn).format('DD-MM-YYYY hh:mm A') : '-';
 			let row = `
 						<tr id="row">
 							<td class="stage01">
-								<div class="h6">INITIATED BY:</div>
-								<div class="h6">`+ userName + `</div>
+								<div class="h6"><strong>`+ userName + `</strong></div>
 								<div class="h6">
-									<span>EMPLOYEE ID: </span> 
+									<span>Employee ID: </span> 
 									<span class="nbr">`+ employeeID + `</span>
 								</div>
 								<div class="h6">
-									<span>IP ADDRESS: </span> 
+									<span>IP Address: </span> 
 									<span class="nbr">`+ systemIPAddress + `</span>
 								</div>
 								<div class="h6">
 									<span>Email: </span> 
 									<span class="nbr">`+ email + `</span>
 								</div>
+								<div class="h6">
+									<span>Remarks: </span> 
+									<span class="nbr">`+ comment + `</span>
+								</div>
 							</td>
 							<td class="stage02">
 								<div class="h6">
-									<span>SENT:</span> 
-									<span class="nbr">`+ moment(createdOn).format('MM/DD/YYYY hh:mm A') + `</span>
+									<span>Status:</span> </br>
+									<span class="nbr">`+ status + `</span>
 								</div>
 								<div class="h6">
-									<span>SIGNED:</span> 
-									<span class="nbr">`+ moment(createdOn).format('MM/DD/YYYY hh:mm A') + `</span></div>
+									<span>Assigned On:</span> </br>
+									<span class="nbr">`+ assignedOn + `</span>
+								</div>
+								<div class="h6">
+									<span>Performed On:</span> </br>
+									<span class="nbr">`+ performedOn + `</span></div>
 							</td>
 							<td class="stage03">
-								<div class="text-center">
-									`+ sign + `
-								</div>
+								<div class="text-center">`+ sign +`</div>
 							</td>
 						</tr>
 						`
